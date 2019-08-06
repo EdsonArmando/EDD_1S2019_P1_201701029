@@ -24,7 +24,8 @@ class Circular_Double_List:
             self.last=nuevo
             self.first.prev=self.last
         self.size+=1
-
+    def returnFirst(self):
+        return self.first
     def printUser(self):
         aux = self.first
         while True:
@@ -32,8 +33,3 @@ class Circular_Double_List:
             aux = aux.next
             if self.first.name == aux.name:
                 break
-list2=Circular_Double_List()
-list2.addUser("Edson")
-list2.addUser("Juan")
-list2.addUser("Lucia")
-list2.printUser()
