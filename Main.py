@@ -2,6 +2,12 @@ import sys,os
 import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN #import special KEYS from the curses library
 from Structures.CircularDoubleList import Circular_Double_List
+cir = Circular_Double_List()
+cir.addUser("Edson")
+cir.addUser("Mike")
+cir.addUser("Lucy")
+cir.addUser("Kyara")
+
 stdscr = curses.initscr()
 win = curses.newwin(30,70,0,0)
 curses.noecho()
@@ -9,17 +15,22 @@ curses.cbreak()
 win.keypad(True)
 key=KEY_LEFT
 def moveUser():
+    new = cir.returnFirst()
     while 1:
+        win.addstr(2, 30,"Move User")
         key = win.getch()
         stdscr.clear()
         if key==KEY_LEFT:
             win.border(0)
-            win.addstr(10, 10,"Hola")
+            new = new.prev
+            win.addstr(5, 30,new.name)
         elif key==KEY_RIGHT:
             win.clear()
             win.border(0)
-            win.addstr(2, 30,"Move User")
+            win.addstr(5, 30,new.name)
+            new = new.next
         elif key==27:
+            win.clear()
             menuOption()
         else:
             win.clear()
