@@ -3,10 +3,6 @@ import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN #import special KEYS from the curses library
 from Structures.CircularDoubleList import Circular_Double_List
 cir = Circular_Double_List()
-cir.addUser("Edson")
-cir.addUser("Mike")
-cir.addUser("Lucy")
-cir.addUser("Kyara")
 
 stdscr = curses.initscr()
 win = curses.newwin(30,70,0,0)
@@ -66,7 +62,15 @@ def menuOption():
             win.clear()
             win.border(0)
             win.addstr(2, 30,"Bulk Loading")
-            win.addstr(5, 30,input('Choose a number: '))
+            f = open("C:/Users/EG/PycharmProjects/EDD_2S2019_P1_201701029/ususarios.csv",'r',encoding = 'utf-8')
+            if f.mode == "r":
+                contents = f.read()
+                cont = contents.split("\n")
+
+            conta = 1
+            while conta<=len(cont)-1:
+                cir.addUser(cont[0])
+                conta+=1
         elif key==27:
             win.clear()
             menuOption()
