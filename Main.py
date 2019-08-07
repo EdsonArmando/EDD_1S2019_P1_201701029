@@ -85,6 +85,7 @@ def menuOption():
                 win.addch(locY,locX,' ')
 
                 if key == KEY_RIGHT:
+                    conta=0
                     win.addch(locY,locX-2,' ')
                     if locX==x and locY==y:
                         point+=1
@@ -156,6 +157,7 @@ def menuOption():
                     if conta==0:
                         stack.printStack()
                         stack.generearDoc()
+                        print('Edson')
                         conta+=1
 
 

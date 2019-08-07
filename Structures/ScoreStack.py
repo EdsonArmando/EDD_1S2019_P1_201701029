@@ -1,3 +1,4 @@
+import os
 class NodeScore:
     def __init__(self,x,y):
         self.x=x
@@ -43,6 +44,9 @@ class Score_Stack:
             datosPila1 =datosPila1 + '"];\n}\n}'
             with open("Pila1.txt",'w',encoding = 'utf-8') as f:
                 f.write(texto+pila1+datosPila1)
+        cmd='dot -Tpng Pila1.txt -o graf.png'
+        os.system(cmd)
+        os.system('graf.png')
 
     def PopScore(self):
         x=0
