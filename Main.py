@@ -122,6 +122,7 @@ def playGame():
 
         elif key==27:
             win.clear()
+            print("Edson",point)
             menuOption()
         elif key==53:
             if conta==0:
@@ -143,7 +144,7 @@ def moveUser():
     while key!=27:
         win.addstr(2, 30,"Move User")
         key = win.getch()
-        stdscr.clear()
+
         if key==KEY_LEFT:
             win.clear()
             win.border(0)
@@ -207,9 +208,11 @@ def menuOption():
                 cont = contents.split("\n")
 
             conta = 1
-            while conta<=len(cont)-1:
+
+            while conta<len(cont):
                 cir.addUser(cont[conta])
                 conta+=1
+            print(conta)
         elif key==27:
             win.clear()
             menuOption()
