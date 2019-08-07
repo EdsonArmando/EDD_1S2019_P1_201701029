@@ -21,16 +21,20 @@ def moveUser():
         key = win.getch()
         stdscr.clear()
         if key==KEY_LEFT:
+            win.clear()
+            win.refresh()
             win.border(0)
             new = new.prev
             win.addstr(5, 30,new.name)
         elif key==KEY_RIGHT:
             win.clear()
             win.border(0)
+            win.refresh()
             win.addstr(5, 30,new.name)
             new = new.next
         elif key==27:
             win.clear()
+            win.refresh()
             menuOption()
         else:
             win.clear()
@@ -47,6 +51,7 @@ def foodSneak1(x,y,point):
 def menuOption():
     conta=0
     stack = Score_Stack()
+    win.refresh()
     win.clear()
     stdscr.addstr(10, 10,"Hola")
     win.addstr(7,21, '1. Play')
@@ -60,6 +65,7 @@ def menuOption():
         key = win.getch()
         stdscr.clear()
         if key==49:
+            win.clear()
             curses.curs_set(0)
             point=0
             x=random.randint(2,120-2)
@@ -75,7 +81,7 @@ def menuOption():
             foodSneak2(x_x,y_y,0)
             win.addch(locY,locX,'#')
             while 1:
-                win.timeout((100 - 15//3)%90)
+                win.timeout((100 - 20//3)%90)
                 if point>=15:
                     win.timeout((100 - 20//3)%90)
                 inputKey = win.getch()
@@ -89,70 +95,80 @@ def menuOption():
                     win.addch(locY,locX-2,' ')
                     if locX==x and locY==y:
                         point+=1
+                        stack.PushScore(x,y)
                         x=random.randint(2,120-2)
                         y=random.randint(2,30-2)
-                        stack.PushScore(x,y)
+
                         foodSneak1(x,y,point)
                     elif locX==x_x and locY==y_y:
                         point -=1
+                        stack.PopScore()
                         x_x=random.randint(2,120-2)
                         y_y=random.randint(2,30-2)
-                        stack.PopScore()
+
                         foodSneak2(x_x,y_y,point)
                     locX = locX + 1
                 elif key == KEY_LEFT:
                     win.addch(locY,locX-2,' ')
                     if locX==x and locY==y:
                         point+=1
+                        stack.PushScore(x,y)
                         x=random.randint(2,120-2)
                         y=random.randint(2,30-2)
-                        stack.PushScore(x,y)
+
                         foodSneak1(x,y,point)
                     elif locX==x_x and locY==y_y:
                         point -=1
+                        stack.PopScore()
                         x_x=random.randint(2,120-2)
                         y_y=random.randint(2,30-2)
-                        stack.PopScore()
+
                         foodSneak2(x_x,y_y,point)
                     locX = locX - 1
                 elif key == KEY_UP:
                     win.addch(locY,locX-3,' ')
                     win.addch(locY,locX-2,' ')
                     win.addch(locY,locX-1,' ')
-                    if locX==x and locY==y:
+                    if locX==x and locY==y or locX-1==x and locY==y or locX-2==x and locY==y or locX-3==x and locY==y :
                         point+=1
+                        stack.PushScore(x,y)
                         x=random.randint(2,120-2)
                         y=random.randint(2,30-2)
-                        stack.PushScore(x,y)
+
                         foodSneak1(x,y,point)
-                    elif locX==x_x and locY==y_y:
+                    elif locX==x_x and locY==y_y or locX-1==x_x and locY==y_y or locX-2==x_x and locY==y_y or locX-3==x_x and locY==y_y :
                         point -=1
+                        stack.PopScore()
                         x_x=random.randint(2,120-2)
                         y_y=random.randint(2,30-2)
-                        stack.PopScore()
+
                         foodSneak2(x_x,y_y,point)
                     locY = locY - 1
                 elif key == KEY_DOWN:
                     win.addch(locY,locX-3,' ')
                     win.addch(locY,locX-2,' ')
                     win.addch(locY,locX-1,' ')
-                    if locX==x and locY==y:
+                    if locX==x and locY==y or locX-1==x and locY==y or locX-2==x and locY==y or locX-3==x and locY==y :
                         point+=1
+                        stack.PushScore(x,y)
                         x=random.randint(2,120-2)
                         y=random.randint(2,30-2)
-                        stack.PushScore(x,y)
+
                         foodSneak1(x,y,point)
-                    elif locX==x_x and locY==y_y:
+                    elif locX==x_x and locY==y_y or locX-1==x_x and locY==y_y or locX-2==x_x and locY==y_y or locX-3==x_x and locY==y_y  :
                         point -=1
+                        stack.PopScore()
                         x_x=random.randint(2,120-2)
                         y_y=random.randint(2,30-2)
-                        stack.PopScore()
+
                         foodSneak2(x_x,y_y,point)
                     locY = locY + 1
-                #elif point=>15:
-                    #win.timeout(100 - (len(snake)//3)%90)
+
                 elif key==27:
+                    menuOption()
                     win.clear()
+
+                    menuOption()
                 elif key==53:
                     if conta==0:
                         stack.printStack()
@@ -182,14 +198,14 @@ def menuOption():
             win.clear()
             win.border(0)
             win.addstr(2, 30,"Bulk Loading")
-            f = open("C:/Users/EG/PycharmProjects/EDD_2S2019_P1_201701029/ususarios.csv",'r',encoding = 'utf-8')
+            f = open("C:/Users/EG/PycharmProjects/EDD_1S2019_P1_201701029/ususarios.csv",'r',encoding = 'utf-8')
             if f.mode == "r":
                 contents = f.read()
                 cont = contents.split("\n")
 
             conta = 1
             while conta<=len(cont)-1:
-                cir.addUser(cont[0])
+                cir.addUser(cont[conta])
                 conta+=1
         elif key==27:
 
