@@ -1,96 +1,92 @@
-import random
-import random
+import sys,os
 import curses
-from curses import textpad
 
-def create_food(snake, box):
-	"""Simple function to find coordinates of food which is inside box and not on snake body"""
-	food = None
-	while food is None:
-		food = [random.randint(box[0][0]+1, box[1][0]-1),
-		random.randint(box[0][1]+1, box[1][1]-1)]
-		if food in snake:
-			food = None
-	return food
+def draw_menu(stdscr):
+    k = 0
+    cursor_x = 0
+    cursor_y = 0
 
+    # Clear and refresh the screen for a blank canvas
+    stdscr.clear()
+    stdscr.refresh()
 
-def main(stdscr):
-	# initial settings
-	curses.curs_set(0)
-	stdscr.nodelay(1)
-	stdscr.timeout(100)
+    # Start colors in curses
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-	# create a game box
-	sh, sw = stdscr.getmaxyx()
-	box = [[3,3], [sh-3, sw-3]]  # [[ul_y, ul_x], [dr_y, dr_x]]
-	textpad.rectangle(stdscr, box[0][0], box[0][1], box[1][0], box[1][1])
+    # Loop where k is the last character pressed
+    while (k != ord('q')):
 
-	# create snake and set initial direction
-	snake = [[sh//2, sw//2+1], [sh//2, sw//2], [sh//2, sw//2-1], [sh//2, sw//2-1], [sh//2, sw//2-1]]
-	direction = curses.KEY_RIGHT
+        # Initialization
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
 
-	# draw snake
-	for y,x in snake:
-		stdscr.addstr(y, x, '#')
+        if k == curses.KEY_DOWN:
+            cursor_y = cursor_y + 1
+        elif k == curses.KEY_UP:
+            cursor_y = cursor_y - 1
+        elif k == curses.KEY_RIGHT:
+            cursor_x = cursor_x + 1
+        elif k == curses.KEY_LEFT:
+            cursor_x = cursor_x - 1
 
-	# create food
-	food = create_food(snake, box)
-	stdscr.addstr(food[0], food[1], '*')
+        cursor_x = max(0, cursor_x)
+        cursor_x = min(width-1, cursor_x)
 
-	# print score
-	score = 0
-	score_text = "Score: {}".format(score)
-	stdscr.addstr(1, sw//2 - len(score_text)//2, score_text)
+        cursor_y = max(0, cursor_y)
+        cursor_y = min(height-1, cursor_y)
 
-	while 1:
-		# non-blocking input
-		key = stdscr.getch()
+        # Declaration of strings
+        title = "Curses example"[:width-1]
+        subtitle = "Written by Clay McLeod"[:width-1]
+        keystr = "Last key pressed: {}".format(k)[:width-1]
+        statusbarstr = "Press 'q' to exit | STATUS BAR | Pos: {}, {}".format(cursor_x, cursor_y)
+        if k == 0:
+            keystr = "No key press detected..."[:width-1]
 
-		# set direction if user pressed any arrow key
-		if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_DOWN, curses.KEY_UP]:
-			direction = key
+        # Centering calculations
+        start_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
+        start_x_subtitle = int((width // 2) - (len(subtitle) // 2) - len(subtitle) % 2)
+        start_x_keystr = int((width // 2) - (len(keystr) // 2) - len(keystr) % 2)
+        start_y = int((height // 2) - 2)
 
-		# find next position of snake head
-		head = snake[0]
-		if direction == curses.KEY_RIGHT:
-			new_head = [head[0], head[1]+1]
-		elif direction == curses.KEY_LEFT:
-			new_head = [head[0], head[1]-1]
-		elif direction == curses.KEY_DOWN:
-			new_head = [head[0]+1, head[1]]
-		elif direction == curses.KEY_UP:
-			new_head = [head[0]-1, head[1]]
+        # Rendering some text
+        whstr = "Width: {}, Height: {}".format(width, height)
+        stdscr.addstr(0, 0, whstr, curses.color_pair(1))
 
-		# insert and print new head
-		stdscr.addstr(new_head[0], new_head[1], '#')
-		snake.insert(0, new_head)
+        # Render status bar
+        stdscr.attron(curses.color_pair(3))
+        stdscr.addstr(height-1, 0, statusbarstr)
+        stdscr.addstr(height-1, len(statusbarstr), " " * (width - len(statusbarstr) - 1))
+        stdscr.attroff(curses.color_pair(3))
 
-		# if sanke head is on food
-		if snake[0] == food:
-			# update score
-			score += 1
-			score_text = "Score: {}".format(score)
-			stdscr.addstr(1, sw//2 - len(score_text)//2, score_text)
+        # Turning on attributes for title
+        stdscr.attron(curses.color_pair(2))
+        stdscr.attron(curses.A_BOLD)
 
-			# create new food
-			food = create_food(snake, box)
-			stdscr.addstr(food[0], food[1], '*')
+        # Rendering title
+        stdscr.addstr(start_y, start_x_title, title)
 
-			# increase speed of game
-			stdscr.timeout(100 - (len(snake)//3)%90)
-		else:
-			# shift snake's tail
-			stdscr.addstr(snake[-1][0], snake[-1][1], ' ')
-			snake.pop()
+        # Turning off attributes for title
+        stdscr.attroff(curses.color_pair(2))
+        stdscr.attroff(curses.A_BOLD)
 
-		# conditions for game over
-		if (snake[0][0] in [box[0][0], box[1][0]] or
-			snake[0][1] in [box[0][1], box[1][1]] or
-			snake[0] in snake[1:]):
-			msg = "Game Over!"
-			stdscr.addstr(sh//2, sw//2-len(msg)//2, msg)
-			stdscr.nodelay(0)
-			stdscr.getch()
-			break
+        # Print rest of text
+        stdscr.addstr(start_y + 1, start_x_subtitle, subtitle)
+        stdscr.addstr(start_y + 3, (width // 2) - 2, '-' * 4)
+        stdscr.addstr(start_y + 5, start_x_keystr, keystr)
+        stdscr.move(cursor_y, cursor_x)
 
-curses.wrapper(main)
+        # Refresh the screen
+        stdscr.refresh()
+
+        # Wait for next input
+        k = stdscr.getch()
+
+def main():
+    curses.wrapper(draw_menu)
+
+if __name__ == "__main__":
+    main()

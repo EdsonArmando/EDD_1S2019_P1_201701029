@@ -5,6 +5,8 @@ import time
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from Structures.CircularDoubleList import Circular_Double_List
 from Structures.ScoreStack import Score_Stack
+from Structures.ScoreBoardQueue import ScoreBoard_Queue
+queue = ScoreBoard_Queue()
 cir = Circular_Double_List()
 
 stdscr = curses.initscr()
@@ -14,8 +16,9 @@ curses.cbreak()
 curses.curs_set(0)
 win.keypad(True)
 key=KEY_LEFT
-def playGame():
+def playGame(name):
     conta=0
+
     stack = Score_Stack()
     win.refresh()
     win.clear()
@@ -35,6 +38,7 @@ def playGame():
     locY = 5
     foodSneak1(x,y,0)
     foodSneak2(x_x,y_y,0)
+    win.addstr(0,45, 'User: '+ name)
     win.addch(locY,locX,'#')
     while 1:
         win.timeout((100 - 20//3)%90)
@@ -65,6 +69,7 @@ def playGame():
                 foodSneak2(x_x,y_y,point)
             locX = locX + 1
         elif key == KEY_LEFT:
+            conta=0
             win.addch(locY,locX-2,' ')
             if locX==x and locY==y:
                 point+=1
@@ -82,6 +87,7 @@ def playGame():
                 foodSneak2(x_x,y_y,point)
             locX = locX - 1
         elif key == KEY_UP:
+            conta=0
             win.addch(locY,locX-3,' ')
             win.addch(locY,locX-2,' ')
             win.addch(locY,locX-1,' ')
@@ -101,6 +107,7 @@ def playGame():
                 foodSneak2(x_x,y_y,point)
             locY = locY - 1
         elif key == KEY_DOWN:
+            conta=0
             win.addch(locY,locX-3,' ')
             win.addch(locY,locX-2,' ')
             win.addch(locY,locX-1,' ')
@@ -121,16 +128,19 @@ def playGame():
             locY = locY + 1
 
         elif key==27:
+            queue.ScoreEnqueue(str(name),point)
+            print("---------")
             win.clear()
-            print("Edson",point)
             menuOption()
         elif key==53:
             if conta==0:
                 stack.printStack()
                 stack.generearDoc()
-                print('Edson')
                 conta+=1
-
+        elif key==54:
+            if conta==0:
+                queue.printValue()
+                conta+=1
 
         win.addch(locY,locX,'#')
         win.addch(locY,locX-1,'#')
@@ -161,15 +171,17 @@ def moveUser():
             win.clear()
             win.refresh()
             menuOption()
+        elif key==10:
+            win.clear()
+            win.refresh()
+            playGame(new.prev.name)
         else:
             curses.endwin
 def foodSneak2(x,y,point):
-    win.addstr(0,45, 'User: Edson')
     win.addstr(0,65, 'Points: '+ str(point))
     win.addstr(y,x, "*")
 
 def foodSneak1(x,y,point):
-    win.addstr(0,45, 'User: Edson')
     win.addstr(0,65, 'Points: '+ str(point))
     win.addstr(y,x, "+")
 def menuOption():
@@ -195,6 +207,7 @@ def menuOption():
             win.border(0)
             win.addstr(20, 20,"Hola2")
         elif key==49:
+            
             playGame()
             break;
         elif key==53:
@@ -212,7 +225,6 @@ def menuOption():
             while conta<len(cont):
                 cir.addUser(cont[conta])
                 conta+=1
-            print(conta)
         elif key==27:
             win.clear()
             menuOption()

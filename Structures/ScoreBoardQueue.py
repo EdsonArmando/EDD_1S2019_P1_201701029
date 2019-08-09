@@ -34,12 +34,3 @@ class ScoreBoard_Queue:
         while aux !=None:
             print(aux.name, aux.points)
             aux = aux.next
-queue=ScoreBoard_Queue()
-queue.ScoreEnqueue("Edson",5)
-queue.ScoreEnqueue("Lucy",5)
-queue.ScoreEnqueue("Aylin",10)
-queue.ScoreEnqueue("Mike",14)
-queue.printValue()
-print("---------------")
-queue.ScoreDequeue()
-queue.printValue()
