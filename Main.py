@@ -17,6 +17,7 @@ curses.curs_set(0)
 win.keypad(True)
 key=KEY_LEFT
 def playGame(name):
+    curses.noecho()
     conta=0
 
     stack = Score_Stack()
@@ -131,6 +132,7 @@ def playGame(name):
             queue.ScoreEnqueue(str(name),point)
             print("---------")
             win.clear()
+            win.timeout(0)
             menuOption()
         elif key==53:
             if conta==0:
@@ -184,8 +186,19 @@ def foodSneak2(x,y,point):
 def foodSneak1(x,y,point):
     win.addstr(0,65, 'Points: '+ str(point))
     win.addstr(y,x, "+")
-def menuOption():
+def obtainName():
 
+    win.clear()
+    win.border(0)
+    win.addstr(10, 10,"Your Name")
+    curses.echo()
+    input = win.getstr(11,10).decode(encoding="utf-8")
+
+    if cir.isFind(input)==False:
+        cir.addUser(input)
+    playGame(input)
+def menuOption():
+    curses.noecho()
     win.clear()
     stdscr.addstr(10, 10,"Hola")
     win.addstr(7,21, '1. Play')
@@ -207,9 +220,7 @@ def menuOption():
             win.border(0)
             win.addstr(20, 20,"Hola2")
         elif key==49:
-            
-            playGame()
-            break;
+            obtainName()
         elif key==53:
             x=""
             win.clear()
