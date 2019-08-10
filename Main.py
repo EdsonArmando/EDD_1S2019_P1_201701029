@@ -238,6 +238,7 @@ def menuOption():
             win.clear()
             win.border(0)
             queue.GenerateImage()
+            menuOption()
         elif key==52:
             obtainOption2()
         elif key==49:
