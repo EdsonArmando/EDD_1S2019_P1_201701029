@@ -1,6 +1,7 @@
 import sys,os
 import curses
 import random
+import subprocess
 import time
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from Structures.CircularDoubleList import Circular_Double_List
@@ -17,6 +18,7 @@ curses.curs_set(0)
 win.keypad(True)
 key=KEY_LEFT
 def playGame(name):
+    curses.curs_set(0)
     curses.noecho()
     conta=0
 
@@ -192,12 +194,29 @@ def obtainName():
     win.border(0)
     win.addstr(10, 10,"Your Name")
     curses.echo()
+    curses.curs_set(1)
     input = win.getstr(11,10).decode(encoding="utf-8")
 
     if cir.isFind(input)==False:
         cir.addUser(input)
     playGame(input)
+def obtainOption2():
+
+    win.clear()
+    win.border(0)
+    win.addstr(7,21, '1. UserReports')
+    win.addstr(8,21, '2. ScoreBoardReports')
+    curses.echo()
+    curses.curs_set(1)
+    input2 = win.getstr(10,21).decode(encoding="utf-8")
+
+    if int(input2)==1:
+        print(input2)
+        cir.generateImage()
+        menuOption()
+
 def menuOption():
+    curses.curs_set(0)
     curses.noecho()
     win.clear()
     stdscr.addstr(10, 10,"Hola")
@@ -218,7 +237,9 @@ def menuOption():
         elif key==50:
             win.clear()
             win.border(0)
-            win.addstr(20, 20,"Hola2")
+            queue.GenerateImage()
+        elif key==52:
+            obtainOption2()
         elif key==49:
             obtainName()
         elif key==53:
@@ -226,7 +247,11 @@ def menuOption():
             win.clear()
             win.border(0)
             win.addstr(2, 30,"Bulk Loading")
-            f = open("C:/Users/EG/PycharmProjects/EDD_1S2019_P1_201701029/ususarios.csv",'r',encoding = 'utf-8')
+            win.addstr(7,21, 'Insert Path of file')
+            curses.echo()
+            curses.curs_set(1)
+            input2 = win.getstr(9,21).decode(encoding="utf-8")
+            f = open(input2,'r',encoding = 'utf-8')
             if f.mode == "r":
                 contents = f.read()
                 cont = contents.split("\n")
@@ -238,6 +263,7 @@ def menuOption():
                 conta+=1
         elif key==27:
             win.clear()
+            curses.curs_set(0)
             menuOption()
 
         elif key==54:

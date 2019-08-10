@@ -1,3 +1,4 @@
+import os
 class ScoreBoardNode:
     def __init__(self,name,points):
         self.name = name
@@ -29,6 +30,21 @@ class ScoreBoard_Queue:
             self.last=None
         else:
             self.first=self.first.next
+    def GenerateImage(self):
+        texto = 'digraph {\n rankdir=LR; \n node [shape=record]; \n label="Cajas de Pago";\nnull [label="NULL" shape=box];\n'
+        datesSocre=""
+        aux = self.first
+        cont=0
+        while aux !=None:
+            datesSocre+= str(cont)+'[label="{<data> '+'('+aux.name+','+str(aux.points)+')'+ '| <ref>  }", width=1.2]\n'
+            datesSocre+= str(cont)+':ref:c'+'->' +str(cont+1)+':data'
+            cont+=1
+            aux = aux.next
+        with open("ScoreBoard.txt",'w',encoding = 'utf-8') as f:
+            f.write(texto+str(cont)+':ref:c -> null\n}'+datesSocre)
+            f.close()
+
+
     def printValue(self):
         aux = self.first
         while aux !=None:
