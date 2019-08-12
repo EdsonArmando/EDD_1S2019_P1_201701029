@@ -21,12 +21,8 @@ def playGame(name):
     curses.curs_set(0)
     curses.noecho()
     conta=0
-
     stack = Score_Stack()
-    win.refresh()
     win.clear()
-    key = win.getch()
-    stdscr.clear()
     win.clear()
     curses.curs_set(0)
     point=0
@@ -34,25 +30,23 @@ def playGame(name):
     y=random.randint(2,30-2)
     x_x=random.randint(2,120-2)
     y_y=random.randint(2,30-2)
-    win.clear()
     win.border(0)
     key = KEY_RIGHT
     locX = 5
     locY = 5
     foodSneak1(x,y,0)
-    foodSneak2(x_x,y_y,0)
     win.addstr(0,45, 'User: '+ name)
     win.addch(locY,locX,'#')
     while 1:
-        win.timeout((100 - 20//3)%90)
-        if point>=15:
+        type = random.randint(0,40)
+        if point<=15:
+            win.timeout((100 - 38//3)%90)
+        elif point>15:
             win.timeout((100 - 20//3)%90)
         inputKey = win.getch()
         if inputKey is not  -1:
             key = inputKey
-
         win.addch(locY,locX,' ')
-
         if key == KEY_RIGHT:
             conta=0
             win.addch(locY,locX-2,' ')
@@ -62,14 +56,24 @@ def playGame(name):
                 x=random.randint(2,120-2)
                 y=random.randint(2,30-2)
 
-                foodSneak1(x,y,point)
+                if type <=5 :
+                    x_x=random.randint(2,120-2)
+                    y_y=random.randint(2,30-2)
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    foodSneak1(x,y,point)
+
             elif locX==x_x and locY==y_y:
                 point -=1
                 stack.PopScore()
                 x_x=random.randint(2,120-2)
                 y_y=random.randint(2,30-2)
-
-                foodSneak2(x_x,y_y,point)
+                if type <=5 :
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    x=random.randint(2,120-2)
+                    y=random.randint(2,30-2)
+                    foodSneak1(x,y,point)
             locX = locX + 1
         elif key == KEY_LEFT:
             conta=0
@@ -79,15 +83,25 @@ def playGame(name):
                 stack.PushScore(x,y)
                 x=random.randint(2,120-2)
                 y=random.randint(2,30-2)
+                if type <=5 :
+                    x_x=random.randint(2,120-2)
+                    y_y=random.randint(2,30-2)
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    foodSneak1(x,y,point)
 
-                foodSneak1(x,y,point)
             elif locX==x_x and locY==y_y:
                 point -=1
                 stack.PopScore()
                 x_x=random.randint(2,120-2)
                 y_y=random.randint(2,30-2)
 
-                foodSneak2(x_x,y_y,point)
+                if type <=5 :
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    x=random.randint(2,120-2)
+                    y=random.randint(2,30-2)
+                    foodSneak1(x,y,point)
             locX = locX - 1
         elif key == KEY_UP:
             conta=0
@@ -99,15 +113,24 @@ def playGame(name):
                 stack.PushScore(x,y)
                 x=random.randint(2,120-2)
                 y=random.randint(2,30-2)
+                if type <=5 :
+                    x_x=random.randint(2,120-2)
+                    y_y=random.randint(2,30-2)
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    foodSneak1(x,y,point)
 
-                foodSneak1(x,y,point)
             elif locX==x_x and locY==y_y or locX-1==x_x and locY==y_y or locX-2==x_x and locY==y_y or locX-3==x_x and locY==y_y :
                 point -=1
                 stack.PopScore()
                 x_x=random.randint(2,120-2)
                 y_y=random.randint(2,30-2)
-
-                foodSneak2(x_x,y_y,point)
+                if type <=5 :
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    x=random.randint(2,120-2)
+                    y=random.randint(2,30-2)
+                    foodSneak1(x,y,point)
             locY = locY - 1
         elif key == KEY_DOWN:
             conta=0
@@ -119,15 +142,24 @@ def playGame(name):
                 stack.PushScore(x,y)
                 x=random.randint(2,120-2)
                 y=random.randint(2,30-2)
+                if type <=5 :
+                    x_x=random.randint(2,120-2)
+                    y_y=random.randint(2,30-2)
+                    foodSneak2(x_x,y_y,point)
+                else:
 
-                foodSneak1(x,y,point)
+                    foodSneak1(x,y,point)
             elif locX==x_x and locY==y_y or locX-1==x_x and locY==y_y or locX-2==x_x and locY==y_y or locX-3==x_x and locY==y_y  :
                 point -=1
                 stack.PopScore()
                 x_x=random.randint(2,120-2)
                 y_y=random.randint(2,30-2)
-
-                foodSneak2(x_x,y_y,point)
+                if type <=5 :
+                    foodSneak2(x_x,y_y,point)
+                else:
+                    x=random.randint(2,120-2)
+                    y=random.randint(2,30-2)
+                    foodSneak1(x,y,point)
             locY = locY + 1
 
         elif key==27:

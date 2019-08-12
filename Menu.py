@@ -1,22 +1,24 @@
-import sys,os
-import curses
-def my_raw_input(stdscr, r, c, prompt_string):
-    curses.echo()
-    stdscr.addstr(r, c, prompt_string)
-    stdscr.refresh()
-    input = stdscr.getstr(r + 1, c, 10).decode(encoding="utf-8")
-    return input  #       ^^^^  reading input at next line
-if __name__ == "__main__":
-    stdscr = curses.initscr()
-    stdscr.clear()
-    choice = my_raw_input(stdscr, 2, 3, "cool or hot?").lower()
-    print(choice)
-    if choice == "cool":
-        stdscr.addstr(5,3,"Super cool!")
-    elif choice == "hot":
-        stdscr.addstr(5, 3," HOT!")
-    else:
-        stdscr.addstr(5, 3," Invalid input")
-    stdscr.refresh()
-    stdscr.getch()
-    curses.endwin()
+import random
+
+class Food:
+    def __init__(self):
+        self.x_coordinate = random.randint(0,60)
+        self.y_coordinate = random.randint(0,20)
+        type = random.randint(0,40)
+        if type <=5 :
+            self.type_food = 0 #0 == bad food (*)
+        else:
+            self.type_food = 1 #1 == good food (+)
+
+    def print(self):
+        print('x-coordinate: ', self.x_coordinate)
+        print('y-coordinate: ', self.y_coordinate)
+        if self.type_food==1:
+            print('food: good')
+        else:
+            print('food: bad')
+
+
+for x in range(0, 10):
+    food = Food()
+    food.print()
