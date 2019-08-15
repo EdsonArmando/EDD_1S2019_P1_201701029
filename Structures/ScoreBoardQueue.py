@@ -9,27 +9,34 @@ class ScoreBoard_Queue:
 	def __init__(self):
 		self.first=None
 		self.last=None
+		self.size=0
 	def isEmpty(self):
 		if self.first is None:
 			return True
 		else:
 			return False
-
+	def returnSize(self):
+		return self.size
 	def ScoreEnqueue(self,name,points):
 		new = ScoreBoardNode(name,points)
+
 		if self.first is None:
 			self.first = new
 			self.last = new
+			self.size+=1
 		else:
 			self.last.next = new
 			self.last = new
+			self.size+=1
 
 	def ScoreDequeue(self):
 		if self.first == self.last:
 			self.first=None
 			self.last=None
+			self.size-=1
 		else:
 			self.first=self.first.next
+			self.size-=1
 	def GenerateImage(self):
 		texto = 'digraph {\n rankdir=LR; \n node [shape=record]; \n label="ScoreBoard";\n null [label="NULL" shape=box];\n'
 		datesSocre=""

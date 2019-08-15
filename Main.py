@@ -163,6 +163,10 @@ def playGame(name):
             locY = locY + 1
 
         elif key==27:
+            size = queue.returnSize()
+            if size==10:
+                queue.ScoreDequeue()
+
             queue.ScoreEnqueue(str(name),point)
             print("---------")
             win.clear()
@@ -305,6 +309,7 @@ def menuOption():
             while conta<len(cont):
                 cir.addUser(cont[conta])
                 conta+=1
+            
         elif key==27:
             win.clear()
             curses.curs_set(0)
