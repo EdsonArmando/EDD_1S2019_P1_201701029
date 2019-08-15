@@ -246,7 +246,21 @@ def obtainOption2():
         print(input2)
         cir.generateImage()
         menuOption()
-
+    elif int(input2)==2:
+        queue.GenerateImage()
+        menuOption()
+def showUser():
+    cont=10
+    win.clear()
+    win.border(0)
+    win.addstr(9, 10,"Name")
+    win.addstr(9, 18,"Score")
+    aux = queue.getFirst()
+    while aux!=None:
+        win.addstr(cont, 10,str(aux.name))
+        win.addstr(cont, 18,str(aux.points))
+        cont+=1
+        aux=aux.next
 def menuOption():
     curses.curs_set(0)
     curses.noecho()
@@ -267,10 +281,7 @@ def menuOption():
             win.addstr(2, 30,"Move")
             moveUser()
         elif key==50:
-            win.clear()
-            win.border(0)
-            queue.GenerateImage()
-            menuOption()
+            showUser()
         elif key==52:
             obtainOption2()
         elif key==49:

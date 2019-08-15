@@ -31,7 +31,7 @@ class ScoreBoard_Queue:
 		else:
 			self.first=self.first.next
 	def GenerateImage(self):
-		texto = 'digraph {\n rankdir=LR; \n node [shape=record]; \n label="Cajas de Pago";\n null [label="NULL" shape=box];\n'
+		texto = 'digraph {\n rankdir=LR; \n node [shape=record]; \n label="ScoreBoard";\n null [label="NULL" shape=box];\n'
 		datesSocre=""
 		aux = self.first
 		cont=0
@@ -47,7 +47,8 @@ class ScoreBoard_Queue:
 		cmd='dot -Tpng ScoreBoard.txt -o scoreBoard.png'
 		os.system(cmd)
 		os.system('scoreBoard.png')
-
+	def getFirst(self):
+		return self.first
 	def printValue(self):
 		aux = self.first
 		while aux !=None:
